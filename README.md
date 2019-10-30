@@ -16,3 +16,10 @@ Check [docker-compose.yaml](docker-compose.yaml)
 ## 4. Run Terraform Example to validate the authentication & authorization to AWS
 
 Check [main.tf](main.tf)
+
+then : 
+
+```sh
+docker-compose run --rm terraform init
+docker-compose run --rm terraform apply
+```
