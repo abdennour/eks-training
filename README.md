@@ -8,6 +8,10 @@ https://console.aws.amazon.com/console/home
 
 Check [docker-compose.yaml](docker-compose.yaml)
 
+```sh
+docker-compose run --rm aws configure --profile terraform-operator
+```
+
 ## 3. Configure Terraform to use the AWS user with the AWS provider
 
 Check [docker-compose.yaml](docker-compose.yaml)
