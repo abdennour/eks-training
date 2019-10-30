@@ -1,0 +1,23 @@
+version: '3.7'
+
+
+services:
+  aws:
+    image: abdennour/aws
+    volumes:
+      - .:/code
+      - aws-creds:/root/.aws
+    restart: "no"
+    working_dir: /code
+
+  terraform:
+    image: hashicorp/terraform:0.12.12
+    volumes:
+      - .:/code
+      - aws-creds:/root/.aws
+    working_dir: /code
+    environment:
+      AWS_PROFILE: terraform-operator
+volumes:
+  aws-creds:
+    name: aws-creds
