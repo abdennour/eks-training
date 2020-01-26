@@ -29,20 +29,11 @@ docker-compose run --rm terraform apply
 ```
 
 
-# II. Authenticate kubectl to the Cluster
+# II. Authenticate kubectl to the Cluster with an existing AWS User
 
 https://docs.aws.amazon.com/eks/latest/userguide/managing-auth.html
 
-## 1. Create IAM Policy for EKS admin access
-https://console.aws.amazon.com/console/home
-
-## 2. Create AWS User (kubectl-operator)
-https://console.aws.amazon.com/console/home
-
-## 3. Configure local profile for "kubectl-operator"
-`aws configure --profile kubectl-operator`
-
-## 4. Install/configure "kubectl" & "aws-iam-authenticator"
+## 1. Install/configure "kubectl" & "aws-iam-authenticator"
   - Install `kubectl` CLI
   - `aws-iam-authenticator` CLI (image: `abdennour/kubectl:v1.14.7-aws1.16.277`)
   - `AWS_PROFILE` envvar are visible by `kubectl`
