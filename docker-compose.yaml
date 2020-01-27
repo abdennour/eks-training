@@ -17,7 +17,7 @@ services:
       - aws-creds:/root/.aws
     working_dir: /code
     environment:
-      AWS_PROFILE: terraform-operator
+      AWS_PROFILE: ${EKS_AWS_PROFILE}
 
   kubectl:
     image: abdennour/kubectl:v1.14.7-aws1.16.277
@@ -27,8 +27,11 @@ services:
     restart: "no"
     entrypoint: kubectl
     environment:
-      AWS_PROFILE: terraform-operator
+      AWS_PROFILE: ${EKS_AWS_PROFILE}
       KUBECONFIG: /code/kubeconfig_awesome
+    ports:
+    # machine : container
+    - 8090:8090
 volumes:
   aws-creds:
     name: aws-creds

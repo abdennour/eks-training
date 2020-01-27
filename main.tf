@@ -31,6 +31,7 @@ module "eks" {
   cluster_name = "awesome"
   subnets = module.vpc.public_subnets
   vpc_id = module.vpc.vpc_id
+  map_users = var.map_users
   # worker nodes
   worker_groups_launch_template = [
     {

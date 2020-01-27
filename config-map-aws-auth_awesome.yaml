@@ -5,12 +5,19 @@ metadata:
   namespace: kube-system
 data:
   mapRoles: |
-    - rolearn: arn:aws:iam::774350622607:role/awesome20200126192207465800000005
+    - rolearn: arn:aws:iam::774350622607:role/awesome20200127191256004800000006
       username: system:node:{{EC2PrivateDNSName}}
       groups:
         - system:bootstrappers
         - system:nodes
 
   
+  
+  mapUsers: |
+    - "groups":
+      - "audit-team"
+      "userarn": "arn:aws:iam::774350622607:user/auditor1"
+      "username": "auditor1"
+    
   
   
