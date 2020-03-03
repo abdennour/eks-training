@@ -9,6 +9,8 @@ services:
       - aws-creds:/root/.aws
     restart: "no"
     working_dir: /code
+    environment:
+      AWS_PROFILE: ${EKS_AWS_PROFILE}
 
   terraform:
     image: hashicorp/terraform:0.12.12
@@ -19,7 +21,7 @@ services:
     environment:
       AWS_PROFILE: ${EKS_AWS_PROFILE}
 
-  kubectl:
+  kubectl: &kubectl
     image: abdennour/kubectl:v1.14.7-aws1.16.277
     volumes:
       - .:/code
@@ -32,6 +34,18 @@ services:
     ports:
     # machine : container
     - 8090:8090
+  helm:
+    <<: *kubectl
+    image: abdennour/kubectl:v0.17.2-aws1.17.9-helm-3.0.2
+    volumes:
+    - testhelm:/root/.config/helm
+    - testhelm2:/root/.cache/helm
+    - .:/code
+    - aws-creds:/root/.aws:ro
+    entrypoint: sh
+
 volumes:
   aws-creds:
     name: aws-creds
+  testhelm:
+  testhelm2:
