@@ -38,6 +38,9 @@ module "eks" {
       name                 = "worker-group-1"
       instance_type        = "t3.large"
       asg_desired_capacity = 2
+      asg_max_size = 5
+      asg_min_size  = 2
+      autoscaling_enabled = true
       public_ip            = true
     }
   ]

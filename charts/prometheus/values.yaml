@@ -1,0 +1,87 @@
+coreDns:
+  enabled: true
+
+kubeDns:
+  enabled: false
+
+alertmanager:
+  alertmanagerSpec:
+    storage:
+      volumeClaimTemplate:
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 10Gi
+
+prometheus:
+  prometheusSpec:
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 10Gi
+
+grafana:
+  adminPassword: HelloWorld
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: "false"
+    hosts:
+      - grafana.kubernetes.tn
+    # tls:
+    #   - secretName: grafana-tls
+    #     hosts:
+    #       - grafana-infra.vemessage.com
+  persistence:
+    enabled: true
+    accessModes: ["ReadWriteOnce"]
+    size: 10Gi
+  dashboardProviders:
+    dashboardproviders.yaml:
+      apiVersion: 1
+      providers:
+      - name: 'default'
+        orgId: 1
+        folder: ''
+        type: file
+        disableDeletion: false
+        editable: true
+        options:
+          path: /var/lib/grafana/dashboards/default
+  # https://github.com/helm/charts/tree/master/stable/grafana#import-dashboards      
+  dashboards:
+    default:
+      # https://grafana.com/api/dashboards/2/revisions/2/download
+      prometheus-stats: 
+        gnetId: 2
+        revision: 2
+        datasource: Prometheus
+
+      # https://grafana.com/api/dashboards/3831/revisions/1/download  
+      cluster-autoscaler:
+        gnetId: 3831
+        revision: 1
+        datasource: Prometheus
+      # https://grafana.com/api/dashboards/7589/revisions/5/download  
+      kafka:
+        gnetId: 7589
+        revision: 5
+        datasource: Prometheus
+      # https://grafana.com/api/dashboards/763/revisions/3/download  
+      redis:
+        gnetId: 763
+        revision: 3
+        datasource: Prometheus        
+
+      # https://grafana.com/api/dashboards/7173/revisions/2/download
+      # nginx-ingress:
+      #   url: https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/grafana/dashboards/nginx.json
+        # gnetId: 7173
+        # revision: 2
+        # datasource: Prometheus
+    
