@@ -56,6 +56,8 @@ grafana:
   # https://github.com/helm/charts/tree/master/stable/grafana#import-dashboards      
   dashboards:
     default:
+      nginx-ingress:
+        url: https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/grafana/dashboards/nginx.json
       # https://grafana.com/api/dashboards/2/revisions/2/download
       prometheus-stats: 
         gnetId: 2
@@ -79,9 +81,5 @@ grafana:
         datasource: Prometheus        
 
       # https://grafana.com/api/dashboards/7173/revisions/2/download
-      # nginx-ingress:
-      #   url: https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/grafana/dashboards/nginx.json
-        # gnetId: 7173
-        # revision: 2
-        # datasource: Prometheus
+
     
