@@ -1,0 +1,22 @@
+repositories:
+- name: stable
+  url: https://kubernetes-charts.storage.googleapis.com
+
+helmDefaults:
+  tillerless: true
+  # args:
+  #   - "--log-level info"
+  # defaults for verify, wait, force, timeout and recreatePods under releases[]
+  verify: false
+  wait: true
+  timeout: 600
+ # recreatePods: false
+  force: true
+
+releases:
+- name: metrics-server
+  chart: stable/metrics-server
+  namespace: kube-system
+  version: '2.8.2'
+  values:
+  - "./charts/metrics-server/values.yaml"
