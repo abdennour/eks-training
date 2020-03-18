@@ -39,3 +39,4 @@ override.tf.json
 # End of https://www.gitignore.io/api/helm,terraform
 kubeconfig*
 
+.env.secrets

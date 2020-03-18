@@ -1,0 +1,55 @@
+
+repositories:
+- name: stable
+  url: https://kubernetes-charts.storage.googleapis.com
+
+helmDefaults:
+  tillerless: true
+  verify: false
+  wait: true
+  timeout: 600
+  force: true
+
+releases:
+# helm install metrics-server \
+# stable/metrics-server --version 2.8.2 \
+#--namespace kube-system -f charts/metrics-server/values.yaml
+- name: metrics-server
+  chart: stable/metrics-server
+  namespace: kube-system
+  version: 2.8.2
+  values:
+  - "./charts/metrics-server/values.yaml"
+
+# helm install prom stable/prometheus-operator \
+#   --namespace monitoring -f charts/prometheus/values.yaml
+- name: prom
+  chart: stable/prometheus-operator
+  version: 8.12.2
+  namespace: monitoring
+  values:
+  - "./charts/prometheus/values.yaml"
+  set:
+  - name: grafana.adminPassword
+    value: {{ requiredEnv "GRAFANA_PWD" }}
+  # - name: prometheusOperator.createCustomResource
+  #   value: false
+
+# helm install cluster-autoscaler stable/cluster-autoscaler \
+#   --namespace kube-system -f charts/metrics-server/cluster-autoscaler/values.yaml
+- name: cluster-autoscaler
+  chart: stable/cluster-autoscaler
+  version: 7.1.0
+  namespace: kube-system
+  values:
+  - "./charts/metrics-server/cluster-autoscaler/values.yaml"
+
+# helm install ingress stable/nginx-ingress \
+#  --namespace kube-system -f charts/nginx-ingress/values.yaml
+# -
+- name: ingress
+  chart: stable/nginx-ingress
+  version: 1.34.1
+  namespace: kube-system
+  values:
+  - "./charts/nginx-ingress/values.yaml"

@@ -2,6 +2,13 @@ rbac:
   create: true
 
 controller:
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      namespace: monitoring
+      additionalLabels:
+        release: prom
   service:
     targetPorts:
       http: http
@@ -15,4 +22,3 @@ controller:
         if ($http_x_forwarded_proto != 'https') {
           return 301 https://$host$request_uri;
         }
-# 	arn:aws:acm:ap-southeast-1:774350622607:certificate/30a8a939-2941-4c84-b746-437e8af6d07d

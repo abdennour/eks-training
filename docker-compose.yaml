@@ -36,7 +36,7 @@ services:
     # machine : container
     - 8090:8090
   helm:
-    image: abdennour/helm:3.1.1-aws1.18.11-kubectlv1.17.3
+    image: abdennour/helm:3.1.2-aws1.18.21-kubectlv1.17.4
     restart: "no"
     working_dir: /code
     volumes:
@@ -44,6 +44,21 @@ services:
     - helm-config:/root/.config/helm
     - helm-cache:/root/.cache/helm
     - aws-creds:/root/.aws:ro
+    environment:
+      KUBECONFIG: /code/kubeconfig_awesome
+      AWS_PROFILE: ${EKS_AWS_PROFILE}
+
+  helmfile:
+    image: abdennour/helmfile:v0.102.0-aws-1.18.21
+    restart: "no"
+    working_dir: /code
+    volumes:
+    - .:/code
+    - helm-config:/root/.config/helm
+    - helm-cache:/root/.cache/helm
+    - aws-creds:/root/.aws:ro
+    env_file:
+    - .env.secrets
     environment:
       KUBECONFIG: /code/kubeconfig_awesome
       AWS_PROFILE: ${EKS_AWS_PROFILE}
