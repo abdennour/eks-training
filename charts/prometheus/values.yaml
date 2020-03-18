@@ -25,7 +25,6 @@ prometheus:
               storage: 10Gi
 
 grafana:
-  adminPassword: HelloWorld
   ingress:
     enabled: true
     annotations:
