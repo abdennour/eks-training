@@ -10,16 +10,16 @@ data "aws_availability_zones" "available" {
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "2.6.0"
-  name = "vpc-awesome"
-  cidr = "10.0.0.0/16" # 192.168 , 172.16
+  name = "vpc-${local.cluster_name}"
+  cidr = "${local.vpc_cidr}" # 192.168 , 172.16
   azs = data.aws_availability_zones.available.names
-  public_subnets = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"]
+  public_subnets = "${local.vpc_subnets}"
 
   enable_dns_support = true
   enable_dns_hostnames = true
 
   tags = {
-    "kubernetes.io/cluster/awesome" = "shared"
+    "kubernetes.io/cluster/${local.cluster_name}" = "shared"
   }
 
 }
@@ -28,7 +28,7 @@ module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "7.0.0"
   # insert the 4 required variables here
-  cluster_name = "awesome"
+  cluster_name = "${local.cluster_name}"
   subnets = module.vpc.public_subnets
   vpc_id = module.vpc.vpc_id
   map_users = var.map_users

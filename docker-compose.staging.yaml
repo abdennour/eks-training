@@ -1,0 +1,20 @@
+version: '3.7'
+
+
+services:
+
+  kubectl:
+    environment:
+      KUBECONFIG: /code/kubeconfig_stagingawesome
+  helm:
+    environment:
+      KUBECONFIG: /code/kubeconfig_stagingawesome
+  helmfile:
+    environment:
+      KUBECONFIG: /code/kubeconfig_stagingawesome
+
+volumes:
+  aws-creds:
+    name: aws-creds
+  helm-config:
+  helm-cache:
