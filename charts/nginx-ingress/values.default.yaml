@@ -1,0 +1,21 @@
+controller:
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      namespace: monitoring
+      additionalLabels:
+        release: prom
+  service:
+    targetPorts:
+      http: http
+      https: http
+    annotations:
+      service.beta.kubernetes.io/aws-load-balancer-ssl-cert: 	arn:aws:acm:ap-southeast-1:774350622607:certificate/30a8a939-2941-4c84-b746-437e8af6d07d
+      service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "http"
+      service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "https"
+      service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: '3600'
+      nginx.ingress.kubernetes.io/configuration-snippet: |
+        if ($http_x_forwarded_proto != 'https') {
+          return 301 https://$host$request_uri;
+        }
