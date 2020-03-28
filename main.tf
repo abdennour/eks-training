@@ -24,6 +24,14 @@ module "vpc" {
 
 }
 
+# provider "kubernetes" {
+#   host = module.eks.cluster_endpoint
+#   load_config_file = true
+#   # kubeconfig file relative to path where you execute tf, in my case it is the same dir
+#   config_path      = "kubeconfig_${local.cluster_name}"
+#   version = "~> 1.9"
+# }
+
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "7.0.0"
