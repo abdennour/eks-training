@@ -13,7 +13,8 @@ services:
       AWS_PROFILE: ${EKS_AWS_PROFILE}
 
   terraform:
-    image: hashicorp/terraform:0.12.12
+ # hashicorp/terraform:0.12.12 # abdennour/terraform:0.12.12-aws-iam-authenticator
+    image: abdennour/terraform:0.12.12-aws-iam-authenticator
     volumes:
       - .:/code
       - aws-creds:/root/.aws
