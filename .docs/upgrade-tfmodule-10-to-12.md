@@ -43,35 +43,10 @@ Instead, `apiVersion: apps/v1` must be used.
 
 
 
-# Upgrade Existing Cluster Steps
+# Pre-upgrade Steps ----------------
 >  [REFERENCE][5]
 
-## I. Kubernetes add-ons
-| Kubernetes version      | 1\.16    | 1\.15     | 1\.14    | 1\.13     |
-|-------------------------|----------|-----------|----------|-----------|
-| Amazon VPC CNI plug\-in | 1\.6\.1  | 1\.6\.1   | 1\.6\.1  | 1\.6\.1   |
-| DNS \(CoreDNS\)         | 1\.6\.6  | 1\.6\.6   | 1\.6\.6  | 1\.6\.6   |
-| KubeProxy               | 1\.16\.8 | 1\.15\.11 | 1\.14\.9 | 1\.13\.12 |
-
-
-1. kube-proxy patch
-
-```sh
-# get current image
-current_image=$(kubectl -n kube-system get daemonset kube-proxy -o=jsonpath='{$.spec.template.spec.containers[:1].image}')
-# get current image base
-image_base=$(echo ${current_image}| sed 's#:.*##')
-
-# patch
-kubectl -n kube-system \
-  set image daemonset.apps/kube-proxy \
-    kube-proxy=${image_base}:v1.16.8
-```
-
-
-## II. Handle Removed API Versions
-
-### Identify
+## I. Identify Removed API Versions
 1. check resources that must be in `apps/v1` api version
 
 ```sh
@@ -101,10 +76,94 @@ k get psp --all-namespaces \
   --template='{{range .items}}{{printf "%s:%s(%s) %s\n" .apiVersion .kind .metadata.namespace .metadata.name }}{{end}}'
 ```
 
+## II. Replace Removed API Versions
+
 - IF the resource belong to your **own Helm Chart**, update the Helm chart.
 - IF the resource belong to a **community Helm Chart**, check if there is up-to-date chart supports the New Kubernetes Versin.
 - IF the resource is added with adhoc-command , use `kubectl edit <resource> <name> -o yaml` or `kubectl patch` or `kubectl set`.. so on
 
+# Upgrade Steps ----------------
+
+## I. Upgrade Control Plane
+```sh
+# after TF module version update, run
+terraform init
+terraform apply
+```
+## II. Upgrade Worker Nodes
+
+```sh
+# evict workload
+node=ip-x-y-z-x.region.compute.internal
+kubectl drain ${node} --ignore-daemonsets --force --delete-local-data
+# terminate the instance
+
+```
+
+
+# Post-upgrade Steps ----------------
+>  [REFERENCE][5]
+
+| Kubernetes version      | 1\.16    | 1\.15     | 1\.14    | 1\.13     |
+|-------------------------|----------|-----------|----------|-----------|
+| Amazon VPC CNI plug\-in | 1\.6\.1  | 1\.6\.1   | 1\.6\.1  | 1\.6\.1   |
+| DNS \(CoreDNS\)         | 1\.6\.6  | 1\.6\.6   | 1\.6\.6  | 1\.6\.6   |
+| KubeProxy               | 1\.16\.8 | 1\.15\.11 | 1\.14\.9 | 1\.13\.12 |
+
+#  I. Kubernetes add-ons VPC CNI plugin
+
+```sh
+# check the current version
+kubectl -n kube-system get daemonset aws-node -o=jsonpath='{$.spec.template.spec.containers[:1].image}'
+# patch
+kubectl apply -f \
+  https://raw.githubusercontent.com/aws/amazon-vpc-cni-k8s/release-1.6/config/v1.6/aws-k8s-cni.yaml
+
+```
+
+
+## II. Kubernetes add-ons - CoreDNS 
+
+**1. coredns configmap update**
+
+```sh
+# Replace "proxy . /etc/resolv.conf" by "forward . /etc/resolv.conf"
+kubectl -n kube-system edit configmap coredns
+```
+
+**2. coredns deployment patch**
+
+```sh
+
+# get current image
+current_image=$(kubectl -n kube-system get deployment coredns -o=jsonpath='{$.spec.template.spec.containers[:1].image}')
+# get current image base
+image_base=$(echo ${current_image}| sed 's#:.*##')
+# patch
+kubectl -n kube-system \
+  set image deployment.apps/coredns \
+    coredns=${image_base}:v1.6.6
+```
+
+## III. Kubernetes add-ons - kube-proxy 
+
+**1. kube-proxy patch**
+
+```sh
+# get current image
+current_image=$(kubectl -n kube-system get daemonset kube-proxy -o=jsonpath='{$.spec.template.spec.containers[:1].image}')
+# get current image base
+image_base=$(echo ${current_image}| sed 's#:.*##')
+
+# patch
+kubectl -n kube-system \
+  set image daemonset.apps/kube-proxy \
+    kube-proxy=${image_base}:v1.16.8
+```
+
+## IV. Others
+
+Any failed pre-upgrade must be done in the last steps.
 
 
 
