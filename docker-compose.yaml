@@ -29,8 +29,8 @@ services:
     volumes:
       - .:/code
       - aws-creds:/root/.aws:ro
-    # entrypoint: kubectl
-    entrypoint: /bin/sh
+    entrypoint: kubectl
+    # entrypoint: /bin/sh
     environment:
       AWS_PROFILE: ${EKS_AWS_PROFILE}
       KUBECONFIG: /code/kubeconfig_awesome
