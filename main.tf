@@ -54,7 +54,7 @@ provider "kubernetes" {
 
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
-  version = "10.0.0"
+  version = "12.0.0"
   # insert the 4 required variables here
   cluster_name = "${local.cluster_name}"
   subnets = module.vpc.public_subnets
