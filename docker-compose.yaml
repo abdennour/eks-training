@@ -23,13 +23,14 @@ services:
       AWS_PROFILE: ${EKS_AWS_PROFILE}
 
   kubectl:
-    image: abdennour/kubectl:v1.14.7-aws1.16.277
+    image: abdennour/kubectl:v1.16.2-aws1.16.281
     restart: "no"
     working_dir: /code
     volumes:
       - .:/code
       - aws-creds:/root/.aws:ro
-    entrypoint: kubectl
+    # entrypoint: kubectl
+    entrypoint: /bin/sh
     environment:
       AWS_PROFILE: ${EKS_AWS_PROFILE}
       KUBECONFIG: /code/kubeconfig_awesome

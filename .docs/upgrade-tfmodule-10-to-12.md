@@ -165,7 +165,10 @@ kubectl -n kube-system \
 
 Any failed pre-upgrade must be done in the last steps.
 
+**1. Prometheus**
 
+- https://stackoverflow.com/a/58572044/747579
+- https://stackoverflow.com/a/58558179/747579
 
 
 
