@@ -13,7 +13,8 @@ alertmanager:
           resources:
             requests:
               storage: 10Gi
-
+prometheusOperator:
+  createCustomResource: false
 prometheus:
   prometheusSpec:
     storageSpec:

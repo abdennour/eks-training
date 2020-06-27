@@ -29,7 +29,7 @@ releases:
 #   --namespace monitoring -f charts/prometheus/values.yaml
 - name: prom
   chart: stable/prometheus-operator
-  version: 8.12.2
+  version: 8.13.11
   namespace: monitoring
   values:
   - "./charts/prometheus/values.yaml"
