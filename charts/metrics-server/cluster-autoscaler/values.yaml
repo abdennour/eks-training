@@ -1,3 +1,7 @@
+image:
+  tag: v1.16.5
+  # as per doc, https://docs.aws.amazon.com/eks/latest/userguide/eks-ug.pdf
+  repository: eu.gcr.io/k8s-artifacts-prod/autoscaling/cluster-autoscaler
 autoDiscovery:
   clusterName: awesome
   enabled: true
