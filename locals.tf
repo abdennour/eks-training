@@ -3,8 +3,8 @@ locals {
   env = "${terraform.workspace}"
 
   cluster_name_map = {
-    default = "awesome"
-    staging = "stagingawesome"
+    default = "datagov-k8s"
+    staging = "datagov-k8s-staging"
   }
 
   cluster_name = "${lookup(local.cluster_name_map, local.env)}"
