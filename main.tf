@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "ap-southeast-1"
+  region = "${local.region}"
   profile = "terraform-operator"
 }
 

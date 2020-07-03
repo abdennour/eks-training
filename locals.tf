@@ -1,5 +1,8 @@
 locals {
-  # default, staging
+
+  region = "us-west-2"
+
+  # Options are [default|staging]
   env = "${terraform.workspace}"
 
   cluster_name_map = {
