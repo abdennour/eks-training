@@ -54,7 +54,7 @@ provider "kubernetes" {
 
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
-  version = "12.0.0"
+  version = "12.1.0"
   # insert the 4 required variables here
   cluster_name = "${local.cluster_name}"
   subnets = module.vpc.public_subnets
@@ -78,6 +78,9 @@ resource "kubernetes_namespace" "apps" {
   metadata {
     name = "apps"
   }
+  depends_on = [
+    module.eks.cluster_id
+  ]
 }
 
 provider "helm" {
@@ -95,6 +98,6 @@ resource "helm_release" "hello-chart" {
   chart     = "${path.module}/hello-chart"
   namespace = kubernetes_namespace.apps.metadata[0].name
   provisioner "local-exec" {
-    command = "helm --kubeconfig kubeconfig_${module.eks.cluster_id} test -n ${self.namespace} hello-chart"
+    command = "helm --kubeconfig kubeconfig_${module.eks.cluster_id} test -n ${self.namespace} ${self.name}"
   }
 }
