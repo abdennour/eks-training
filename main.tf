@@ -73,4 +73,28 @@ module "eks" {
     }
   ]
 
+# Explicitly create namespaces
+resource "kubernetes_namespace" "apps" {
+  metadata {
+    name = "apps"
+  }
+}
+
+provider "helm" {
+  version        = "~> 1.2.3"
+  kubernetes {
+    host                   = data.aws_eks_cluster.cluster.endpoint
+    cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
+    token                  = data.aws_eks_cluster_auth.cluster.token
+    load_config_file       = false
+  }
+}
+
+resource "helm_release" "hello-chart" {
+  name      = "hello-chart"
+  chart     = "${path.module}/hello-chart"
+  namespace = kubernetes_namespace.apps.metadata[0].name
+  provisioner "local-exec" {
+    command = "helm --kubeconfig kubeconfig_${module.eks.cluster_id} test -n ${self.namespace} hello-chart"
+  }
 }
