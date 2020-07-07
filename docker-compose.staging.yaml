@@ -9,9 +9,6 @@ services:
   helm:
     environment:
       KUBECONFIG: /code/kubeconfig_stagingawesome
-  helmfile:
-    environment:
-      KUBECONFIG: /code/kubeconfig_stagingawesome
 
 volumes:
   aws-creds:
