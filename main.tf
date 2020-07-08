@@ -209,7 +209,7 @@ resource "helm_release" "cluster-autoscaler" {
   version = "7.1.0"
   namespace = "kube-system"
   values    = [
-    "${file("./charts/metrics-server/cluster-autoscaler/values.yaml")}",
+    "${file("./charts/cluster-autoscaler/values.yaml")}",
   ]
 
   provisioner "local-exec" {

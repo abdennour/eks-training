@@ -63,8 +63,6 @@ Run Terraform apply:
 ./run-docker-compose.sh terraform apply
 ```
 
-TODO: Set up Helm charts
-
 # Teardown
 
 Run Terraform destory
