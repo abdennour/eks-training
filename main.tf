@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "${local.region}"
+  region = local.region
   profile = "terraform-operator"
   version = "~> 2.67"
 }
