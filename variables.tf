@@ -11,3 +11,7 @@ variable "map_users" {
     groups = ["audit-team"]
   }]
 }
+
+variable "GRAFANA_PWD" {
+  description = "Password to be used for accessing the Grafana service"
+}
