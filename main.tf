@@ -237,6 +237,4 @@ resource "helm_release" "ingress" {
   depends_on = [
     module.eks.cluster_id
   ]
-
-}
 }
