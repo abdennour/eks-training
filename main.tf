@@ -24,6 +24,32 @@ module "vpc" {
 
 }
 
+resource "aws_iam_policy" "autoscaler_policy" {
+  name        = "autoscaler"
+  path        = "/"
+  description = "Autoscaler bots are fully allowed to read/run autoscaling groups"
+ 
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+    "Action": [
+      "autoscaling:DescribeAutoScalingGroups",
+      "autoscaling:DescribeAutoScalingInstances",
+      "autoscaling:DescribeLaunchConfigurations",
+      "autoscaling:DescribeTags",
+      "autoscaling:SetDesiredCapacity",
+      "autoscaling:TerminateInstanceInAutoScalingGroup",
+      "ec2:DescribeLaunchTemplateVersions"
+    ],
+    "Resource": "*",
+    "Effect": "Allow"
+    }
+  ]
+}
+EOF
+}
 
 # static config of k8s provider - TMP
 # provider "kubernetes" {
@@ -72,5 +98,11 @@ module "eks" {
       public_ip            = true
     }
   ]
+  # for cluster-autoscaler (page 153 https://docs.aws.amazon.com/eks/latest/userguide/eks-ug.pdf)
+  workers_additional_policies = [
+    aws_iam_policy.autoscaler_policy.arn
+  ]
+
+}
 
 }
