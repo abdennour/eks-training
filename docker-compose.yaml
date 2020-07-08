@@ -19,6 +19,8 @@ services:
       - .:/code
       - aws-creds:/root/.aws
     working_dir: /code
+    env_file:
+    - .env.secrets
     environment:
       AWS_PROFILE: ${EKS_AWS_PROFILE}
 
@@ -46,21 +48,6 @@ services:
     - helm-config:/root/.config/helm
     - helm-cache:/root/.cache/helm
     - aws-creds:/root/.aws:ro
-    environment:
-      KUBECONFIG: /code/kubeconfig_awesome
-      AWS_PROFILE: ${EKS_AWS_PROFILE}
-
-  helmfile:
-    image: abdennour/helmfile:v0.102.0-aws-1.18.21
-    restart: "no"
-    working_dir: /code
-    volumes:
-    - .:/code
-    - helm-config:/root/.config/helm
-    - helm-cache:/root/.cache/helm
-    - aws-creds:/root/.aws:ro
-    env_file:
-    - .env.secrets
     environment:
       KUBECONFIG: /code/kubeconfig_awesome
       AWS_PROFILE: ${EKS_AWS_PROFILE}
