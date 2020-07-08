@@ -1,6 +1,7 @@
 provider "aws" {
-  region = "ap-southeast-1"
+  region = "${local.region}"
   profile = "terraform-operator"
+  version = "~> 2.67"
 }
 
 data "aws_availability_zones" "available" {
@@ -9,7 +10,7 @@ data "aws_availability_zones" "available" {
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "2.6.0"
+  version = "2.44.0"
   name = "vpc-${local.cluster_name}"
   cidr = "${local.vpc_cidr}" # 192.168 , 172.16
   azs = data.aws_availability_zones.available.names
@@ -57,6 +58,7 @@ module "eks" {
   version = "12.1.0"
   # insert the 4 required variables here
   cluster_name = "${local.cluster_name}"
+  cluster_version = "1.16"
   subnets = module.vpc.public_subnets
   vpc_id = module.vpc.vpc_id
   map_users = var.map_users
@@ -70,6 +72,19 @@ module "eks" {
       asg_min_size  = 2
       autoscaling_enabled = true
       public_ip            = true
+      tag_specifications = {
+        resource_type = "instance"
+        tags = {
+          Name = "k8s.io/cluster-autoscaler/${local.cluster_name}"
+        }
+      }
+
+      tag_specifications = {
+        resource_type = "instance"
+        tags = {
+          Name = "k8s.io/cluster-autoscaler/enabled"
+        }
+      }
     }
   ]
 

@@ -5,10 +5,10 @@ services:
 
   kubectl:
     environment:
-      KUBECONFIG: /code/kubeconfig_awesome
+      KUBECONFIG: /code/kubeconfig_datagov-k8s
   helm:
     environment:
-      KUBECONFIG: /code/kubeconfig_awesome
+      KUBECONFIG: /code/kubeconfig_datagov-k8s
 
 volumes:
   aws-creds:

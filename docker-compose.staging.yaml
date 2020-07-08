@@ -5,10 +5,10 @@ services:
 
   kubectl:
     environment:
-      KUBECONFIG: /code/kubeconfig_stagingawesome
+      KUBECONFIG: /code/kubeconfig_datagov-k8s-staging
   helm:
     environment:
-      KUBECONFIG: /code/kubeconfig_stagingawesome
+      KUBECONFIG: /code/kubeconfig_datagov-k8s-staging
 
 volumes:
   aws-creds:
