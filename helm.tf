@@ -33,6 +33,9 @@ resource "helm_release" "hello-chart" {
   name      = "hello-chart"
   chart     = "${path.module}/hello-chart"
   namespace = kubernetes_namespace.apps.metadata[0].name
+  values = [
+    templatefile("./hello-chart/values.yaml", { ingress_host = "hello.${local.base_domain}", ingress_paths = "[\"/\"]" })
+  ]
   provisioner "local-exec" {
     command = "helm --kubeconfig kubeconfig_${module.eks.cluster_id} test -n ${self.namespace} ${self.name}"
   }
@@ -65,12 +68,16 @@ resource "helm_release" "prometheus" {
   version = "8.13.11"
   namespace = "monitoring"
 
-  set {
-    name  = "grafana.adminPassword"
-    value = var.GRAFANA_PWD
-  }
+  # set {
+  #   name  = "grafana.adminPassword"
+  #   value = var.GRAFANA_PWD
+  # }
+  # set {
+  #   name  = "grafana.ingress.hosts"
+  #   value = "[grafana.${local.base_domain}]"
+  # }
   values    = [
-    "${file("./charts/prometheus/values.yaml")}",
+    templatefile("./charts/prometheus/values.yaml", { grafana_pwd = var.GRAFANA_PWD, base_domain = local.base_domain })
   ]
   provisioner "local-exec" {
     command = "helm --kubeconfig kubeconfig_${module.eks.cluster_id} test -n ${self.namespace} ${self.name}"
