@@ -27,5 +27,9 @@ locals {
  
   vpc_subnets= "${lookup(local.vpc_subnets_map, local.env)}"
 
-
+  base_domain_map = {
+    default = "logtimegames.com"
+    staging = "staging.logtimegames.com"
+  }
+  base_domain = "${lookup(local.base_domain_map, local.env)}"
 }

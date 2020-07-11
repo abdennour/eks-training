@@ -100,20 +100,4 @@ resource "helm_release" "cluster-autoscaler" {
   ]
 }
 
-resource "helm_release" "ingress" {
-  name = "ingress"
-  chart = "stable/nginx-ingress"
-  version = "1.34.1"
-  namespace = "kube-system"
-  values    = [
-    "${file("./charts/nginx-ingress/values.yaml")}",
-    "${file("./charts/nginx-ingress/values.${local.env}.yaml")}"
-  ]
-  provisioner "local-exec" {
-    command = "helm --kubeconfig kubeconfig_${module.eks.cluster_id} test -n ${self.namespace} ${self.name}"
-  }
 
-  depends_on = [
-    module.eks.cluster_id
-  ]
-}
