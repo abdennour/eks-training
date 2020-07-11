@@ -55,7 +55,7 @@ Create an IAM user that you want to be used by Terraform:
 Authenticate with AWS:
 1. Run `./run-docker-compose.sh aws configure --profile terraform-operator`.
 1. Supply the `Access key ID` and `Secret access key` from above.
-1. Supply your desired region (and edit `locals.tf` if it's not `us-west-2`).
+1. Supply your desired region (and edit `locals.tf` if it's not `us-east-1`).
 1. Leave the output format as-is.
 
 Run Terraform apply:

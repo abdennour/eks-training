@@ -1,6 +1,6 @@
 locals {
 
-  region = "us-west-2"
+  region = "us-east-1"
 
   # Options are [default|staging]
   env = "${terraform.workspace}"
