@@ -33,7 +33,8 @@ resource "helm_release" "ingress" {
   atomic = "true"
 
   values    = [
-    templatefile("./charts/nginx-ingress/values.yaml", { certificate_arn = aws_acm_certificate.cert.arn})
+    file("./charts/nginx-ingress/values.yaml"),
+    templatefile("./charts/nginx-ingress/values.${local.env}.yaml", { certificate_arn = aws_acm_certificate.cert.arn}),
   ]
   
   provisioner "local-exec" {
