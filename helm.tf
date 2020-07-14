@@ -68,14 +68,6 @@ resource "helm_release" "prometheus" {
   version = "8.13.11"
   namespace = "monitoring"
 
-  # set {
-  #   name  = "grafana.adminPassword"
-  #   value = var.GRAFANA_PWD
-  # }
-  # set {
-  #   name  = "grafana.ingress.hosts"
-  #   value = "[grafana.${local.base_domain}]"
-  # }
   values    = [
     templatefile("./charts/prometheus/values.yaml", { grafana_pwd = var.GRAFANA_PWD, base_domain = local.base_domain })
   ]
@@ -95,7 +87,7 @@ resource "helm_release" "cluster-autoscaler" {
   version = "7.1.0"
   namespace = "kube-system"
   values    = [
-    "${file("./charts/cluster-autoscaler/values.yaml")}",
+    templatefile("./charts/cluster-autoscaler/values.yaml", { aws_region = local.region }),
   ]
 
   provisioner "local-exec" {

@@ -1,7 +1,7 @@
 autoDiscovery:
   clusterName: awesome
   enabled: true
-awsRegion: ap-southeast-1
+awsRegion: ${aws_region}
 cloudProvider: aws
 rbac:
   create: true
