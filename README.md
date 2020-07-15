@@ -71,4 +71,20 @@ Run Terraform destory
 ```
 
 
+# TODO
+
+Remove [the reference to Bret's Docker image for Terraform](./docker-compose.yaml#L16) when it's safe to do so
+ - See [the upstream PR about this](https://github.com/abdennour/dockerfiles/pull/4)
+
+Missing documentation (that would cover the course material): 
+- How to set up the auditor user/role with kubectl and config map
+
+Potential enhancements:
+- Use the Terraform kubernetes provider to apply the config map change rather than do it by hand
+- Add Route53 and ExternalDNS Helm chart
+- Add the AWS node termination handler:
+  https://github.com/aws/aws-node-termination-handler
+- Add kubeapps: https://kubeapps.com/
+- Add cost information: https://github.com/antonbabenko/terraform-cost-estimation
+- Move to spot instances: https://github.com/terraform-aws-modules/terraform-aws-eks/blob/master/docs/spot-instances.md
 

@@ -13,7 +13,7 @@ services:
       AWS_PROFILE: ${EKS_AWS_PROFILE}
 
   terraform:
-    image: abdennour/terraform:0.12.28-helm3.2.4-aws-iam-auth
+    image: mogul/terraform:0.12.28-helm3.2.4-aws-iam-auth
     volumes:
       - .:/code
       - aws-creds:/root/.aws
