@@ -9,6 +9,7 @@ services:
       - aws-creds:/root/.aws
     restart: "no"
     working_dir: /code
+    entrypoint: aws
     environment:
       AWS_PROFILE: ${EKS_AWS_PROFILE}
 
