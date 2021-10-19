@@ -3,7 +3,7 @@ version: '3.7'
 
 services:
   aws:
-    image: abdennour/aws
+    image: abdennour/aws:1.18.142-helm3.3.3
     volumes:
       - .:/code
       - aws-creds:/root/.aws
